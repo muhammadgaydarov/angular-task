@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { UsersService } from '../users.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { User } from '../users-list/users-list.component';
+
 
 
 @Component({
@@ -21,7 +21,13 @@ export class UserCreateComponent {
    companyname: new FormControl('')
   })
 
-  createUser(event: User): void {
-    this.usersService.createUser(event)
+  createUser(): void {
+    console.log({
+      name: this.formUsers.get('name')?.value,
+      username: this.formUsers.get('username')?.value,
+      email: this.formUsers.get('email')?.value,
+      companyname: this.formUsers.get('companyname')?.value
+    })
+    console.log('USER IS CREATE')
   }
 } 
