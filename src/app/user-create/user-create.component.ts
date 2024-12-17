@@ -1,33 +1,50 @@
-import { Component, inject } from '@angular/core';
-import { UsersService } from '../users.service';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-
-
+import { Component, EventEmitter, inject, Output } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { User } from '../interface/user.interface';
 
 @Component({
   selector: 'app-user-create',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
   templateUrl: './user-create.component.html',
-  styleUrl: './user-create.component.css'
+  styleUrl: './user-create.component.css',
 })
 export class UserCreateComponent {
-  readonly usersService = inject(UsersService)
-  
-  public formUsers = new FormGroup({
-   name: new FormControl(''),
-   username: new FormControl(''),
-   email: new FormControl(''),
-   companyname: new FormControl('')
-  })
+  @Output()
+  createUser = new EventEmitter();
 
-  createUser(): void {
-    console.log({
-      name: this.formUsers.get('name')?.value,
-      username: this.formUsers.get('username')?.value,
-      email: this.formUsers.get('email')?.value,
-      companyname: this.formUsers.get('companyname')?.value
-    })
-    console.log('USER IS CREATE')
+  public formUsers = new FormGroup({
+    name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    username: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+    ]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    website: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+    ]),
+    companyname: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+    ]),
+  });
+
+  submitForm(): void {
+    this.createUser.emit(this.formUsers.value);
   }
-} 
+}

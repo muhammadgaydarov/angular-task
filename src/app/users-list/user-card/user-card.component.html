@@ -1,12 +1,29 @@
-<div>
-    <p class="title">Name:</p>
-    <p>{{user.name}}</p>
-    <p class="title">Username:</p>
-    <p>{{user.username}}</p>
-    <p class="title">Email:</p>
-    <p>{{user.email}}</p>
-    <p class="title">Company Name:</p>
-    <p>{{user.company.name}}</p>
-    <button (click)="onDelete(user.id)" class="users-button">Удалить</button>
-</div>
-    
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Пользователь</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div>
+      <p class="title">Имя:</p>
+      <p>{{ user.name }}</p>
+    </div>
+    <div>
+      <p class="title">Email:</p>
+      <p>{{ user.email }}</p>
+    </div>
+    <div>
+      <p class="title">Сайт:</p>
+      <p>{{ user.website }}</p>
+    </div>
+    <div>
+      <p class="title">Название компании:</p>
+      <p>{{ user.company.name }}</p>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="warn" (click)="onDelete(user.id)">
+      Удалить
+    </button>
+  </mat-card-actions>
+  <button mat-raised-button color="green" (click)="openDialog()">Редактировать</button>
+</mat-card>

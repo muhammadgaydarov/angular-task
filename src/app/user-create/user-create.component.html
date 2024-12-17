@@ -1,13 +1,38 @@
-<form [formGroup]="formUsers" (ngSubmit)="createUser()">
-    <div class="create-form">
-        <p>Name:</p>
-        <input type="text" formControlName="name">
-        <p>Username:</p>
-        <input type="text" formControlName="username">
-        <p>Email:</p>
-        <input type="text" formControlName="email">
-        <p>CompanyName:</p>
-        <input type="text" formControlName="companyname">
-        <button class="create-button" type="submit">Добавить</button>
-    </div>
+<form [formGroup]="formUsers" (ngSubmit)="submitForm()">
+  <div class="create-form">
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput type="text" formControlName="username" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Website</mat-label>
+      <input matInput type="text" formControlName="website" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Company Name</mat-label>
+      <input matInput type="text" formControlName="companyname" />
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="formUsers.invalid"
+    >
+      Создать
+    </button>
+  </div>
 </form>
+
