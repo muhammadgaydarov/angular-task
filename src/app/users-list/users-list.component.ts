@@ -5,6 +5,7 @@ import { AsyncPipe, NgFor } from '@angular/common';
 import { UserCardComponent } from './user-card/user-card.component';
 import { UserCreateComponent } from '../user-create/user-create.component';
 import { MatDialog } from '@angular/material/dialog';
+import { User } from '../interface/user.interface';
 
 @Component({
   selector: 'app-users-list',
@@ -42,15 +43,13 @@ export class UsersListComponent {
       id: new Date().getTime(),
       name: event.name,
       email: event.email,
-      website: event.website,
-      company: {
-        name: event.name,
-      },
+      username: event.website,
+      phone: event.phone 
     });
   }
 
-  editUser(id: any) {
-    this.usersService.editUser(id)
+  editUser(user: User) {
+    this.usersService.editUser(user)    
   }
 }
 

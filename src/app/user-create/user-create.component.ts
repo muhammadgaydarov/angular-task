@@ -1,4 +1,10 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  Output,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -6,10 +12,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogClose, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { User } from '../interface/user.interface';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-user-create',
@@ -19,32 +26,62 @@ import { User } from '../interface/user.interface';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatDialogClose,
+    NgIf,
+    MatDialogModule
   ],
   templateUrl: './user-create.component.html',
   styleUrl: './user-create.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserCreateComponent {
+  public readonly dialogRef = inject(MatDialogRef<UserCreateComponent>);
+  private readonly data = inject<{ isEdit: boolean; user: User }>(
+    MAT_DIALOG_DATA
+  );
+  public readonly isEdit: boolean = this.data.isEdit;
+
+
   @Output()
   createUser = new EventEmitter();
 
   public formUsers = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     username: new FormControl('', [
       Validators.required,
       Validators.minLength(3),
     ]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    website: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-    ]),
-    companyname: new FormControl('', [
+    phone: new FormControl('', [
       Validators.required,
       Validators.minLength(3),
     ]),
   });
 
-  submitForm(): void {
-    this.createUser.emit(this.formUsers.value);
+  get userWithUpdateFields(): {} {
+    return {
+      ...this.formUsers.value,
+      id: this.data.user?.id ?? new Date().getTime(),
+    };
+  }
+
+  onCancel(): void {
+    if (this.isEdit && this.data.user) {
+      this.formUsers.setValue({
+        name: this.data.user.name,
+        email: this.data.user.email,
+        username: this.data.user.username,
+        phone: this.data.user.phone,
+      });
+    } else {
+      this.formUsers.reset();
+    }
+    this.dialogRef.close();
+  }
+
+  public submitForm(): void {
+    if (this.formUsers.valid) {
+      this.dialogRef.close(this.userWithUpdateFields);
+    }
   }
 }

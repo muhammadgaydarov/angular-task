@@ -1,38 +1,83 @@
-<form [formGroup]="formUsers" (ngSubmit)="submitForm()">
-  <div class="create-form">
-    <mat-form-field appearance="fill">
-      <mat-label>Name</mat-label>
-      <input matInput type="text" formControlName="name" />
-    </mat-form-field>
+<div class="container">
+  <h2>
+    {{ isEdit ? "Редактировать пользователя" : "Добавить пользователя" }}
+  </h2>
+  <div class="column">
+    <form (ngSubmit)="submitForm()" [formGroup]="formUsers">
+      <div class="input-box">
+        <p>ИМЯ</p>
+        <input formControlName="name" placeholder="Введите имя"/>
+        <small
+          *ngIf="
+            formUsers.controls['name'].invalid &&
+            (formUsers.controls['name'].dirty || formUsers.controls['name'].touched)
+          "
+          class="alert"
+        >
+          *Поле имя не может быть пустым.
+        </small>
+      </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Username</mat-label>
-      <input matInput type="text" formControlName="username" />
-    </mat-form-field>
+      <div class="input-box">
+        <p>USERNAME</p>
+        <input formControlName="username" placeholder="Введите логин"/>
+        <small
+          *ngIf="
+          formUsers.controls['username'].invalid &&
+            (formUsers.controls['username'].dirty ||
+            formUsers.controls['username'].touched)
+          "
+          class="alert"
+        >
+          *Поле логин не может быть пустым.
+        </small>
+      </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Email</mat-label>
-      <input matInput type="email" formControlName="email" />
-    </mat-form-field>
+      <div class="input-box">
+        <p>EMAIL</p>
+        <input formControlName="email" placeholder="Введите email"/>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Website</mat-label>
-      <input matInput type="text" formControlName="website" />
-    </mat-form-field>
+        <div
+          *ngIf="
+          formUsers.get('email')?.invalid &&
+            (formUsers.get('email')?.touched || formUsers.get('email')?.dirty)
+          "
+          class="alert"
+        >
+          <small *ngIf="formUsers.get('email')?.errors?.['required']" class="alert">
+            *Поле email не может быть пустым.
+          </small>
+          <small *ngIf="formUsers.get('email')?.errors?.['email']" class="alert">
+            *Ведите корректный email.
+          </small>
+        </div>
+      </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Company Name</mat-label>
-      <input matInput type="text" formControlName="companyname" />
-    </mat-form-field>
+      <div class="input-box">
+        <p>ТЕЛЕФОН</p>
+        <input formControlName="phone" placeholder="Введите номер телефона"/>
+        <small
+          *ngIf="
+          formUsers.controls['phone'].invalid &&
+            (formUsers.controls['phone'].dirty || formUsers.controls['phone'].touched)
+          "
+          class="alert"
+        >
+          *Поле телефона не может быть пустым.
+        </small>
+      </div>
 
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="formUsers.invalid"
-    >
-      Создать
-    </button>
+      <div class="buttons">
+        <button (click)="onCancel()" class="btn-cancel">Отмена</button>
+        <button
+          [disabled]="formUsers.invalid"
+          [mat-dialog-close]="userWithUpdateFields"
+          class="btn-create"
+          type="submit"
+        >
+          {{ isEdit ? "Сохранить" : "Создать" }}
+        </button>
+      </div>
+    </form>
   </div>
-</form>
-
+</div>
